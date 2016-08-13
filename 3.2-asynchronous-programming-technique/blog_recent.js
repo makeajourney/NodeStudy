@@ -11,23 +11,15 @@ var server = http.createServer(function (req, res) {    // 클라이언트 요�
 
 function getTitles(res) {   // getTitles에서 제목을 가져오고 getTemplate에 제어를 넘김
     fs.readFile('./titles.json', function (err, data) {     // JSON 파일을 읽고 파일 내용을 처리할 방법을 정의한 콜백을 사용
-        if (err) {
-            hadError(err, res);
-        }
-        else {
-            getTemplate(JSON.parse(data.toString()), res);      // JSON 텍스트를 파싱해서 getTemplate로 넘김
-        }
+        if (err) return hadError(err, res)          // 오류가 발생하면 함수를 더는 실행할 필요가 없으므로 else 분기를 만드는 대신 반환한다
+        getTemplate(JSON.parse(data.toString()), res);      // JSON 텍스트를 파싱해서 getTemplate로 넘김
     });
 }
 
 function getTemplate(titles, res) {     // getTemplate에서 템플릿 파일을 읽은 후 formatHtml에 제어를 넘김
     fs.readFile('./template.html', function (err, data) {       // HTML 템플릿을 읽고 템플릿이 로드됐을 때 콜백 사용
-        if (err) {
-            hadError(err, res);
-        }
-        else {
-            formatHtml(titles, data.toString(), res);
-        }
+        if (err) return hadError(err, res)
+        formatHtml(titles, data.toString(), res);
     });
 }
 
